@@ -1,22 +1,25 @@
 import React, { Component, Fragment } from 'react';
 import Boxes from '../../Boxes/Boxes';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
+
 export class Classes extends Component {
 	state = {
 		classes: [],
 		loading: false,
 		searchText: ''
 	};
+
 	getClasses = async () => {
 		this.setState({ loading: true });
 		try {
 			const res = await axios.get(`settings/classes`);
 			this.setState({ classes: res.data.classes, loading: false });
 		} catch (error) {
-			this.setState({ loading: false });
-
 			console.log(error);
-			alert('something went wrong, please try again later');
+			this.setState({ loading: false });
+			alert('Error 500, Something went wrong, please try again later');
 		}
 	};
 
@@ -29,27 +32,56 @@ export class Classes extends Component {
 	};
 
 	delete = async (classId, className) => {
-		if (window.confirm(`Do You want to delete a subject with name ${className} ?`)) {
+	
 			try {
-				await axios.delete(`settings/class/delete/${classId}`);
-				this.getClasses();
+
+				Swal.fire({
+					title: `Do you want to delete a class with name ${className}`,
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonColor: '#d33',
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: 'Yes, delete it!'
+				}).then(async(result) => {
+					
+					if (result.isConfirmed) {
+						await axios.delete(`settings/class/delete/${classId}`);
+						this.getClasses();
+					  Swal.fire(
+						'Deleted!',
+						`${className} is deleted`,
+						'success'
+					  )
+					}
+				  })
+				
 			} catch (error) {
 				alert(error.response.data.error);
 			}
-		}
+		
 	};
+
 	searching = e => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
 
 	search = async () => {
-		if (this.state.searchText === '') return alert('Please insert something');
+		if (this.state.searchText === '')
+		{
+			return Swal.fire({
+			title:'Please insert something',
+			icon:'question'
+		}) };
 		this.setState({ loading: true });
 		try {
 			const res = await axios.get(`settings/classes/search/${this.state.searchText}`);
 			this.setState({ loading: false });
 			if (res.data.classes.length < 1) {
-				return alert('Classes Not Found!');
+				return Swal.fire({
+					title:'Classes Not Found!',
+					icon:'info'
+			});
 			}
 			this.setState({ classes: res.data.classes });
 		} catch (error) {

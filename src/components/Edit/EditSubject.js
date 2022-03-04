@@ -14,8 +14,6 @@ export default class AddSubject extends Component {
 
 	getSubject = async e => {
 		const subjectId = this.props.match.params.subjectId;
-		console.log('AddSubject -> subjectId', subjectId, typeof subjectId);
-
 		this.setState({ loading: true });
 		try {
 			const subject = await axios.get(`settings/subject/${subjectId}`);

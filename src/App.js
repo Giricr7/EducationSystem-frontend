@@ -31,7 +31,7 @@ import About from './components/About/About';
 import NotFound from './components/NotFound/NotFound';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://school-managment-system-app.herokuapp.com/';
+axios.defaults.baseURL = 'http://localhost:5000/';
 
 function App() {
 	return (

@@ -22,7 +22,6 @@ export default class AddSubject extends Component {
 			const addingResult = await axios.post('settings/classes', { name: this.state.name });
 			console.log('AddSubject -> addingResult', addingResult);
 			let doneObj = { message: addingResult.data.message, type: 'success' };
-
 			this.setState({ loading: false, doneObj: doneObj });
 		} catch (error) {
 			console.log(error.response.data.error);

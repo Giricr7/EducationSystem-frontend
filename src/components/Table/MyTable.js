@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import moment from 'moment';
 import { Edit, Delete, Person, Visibility } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
@@ -68,7 +69,7 @@ function MyTable(props) {
 										const joinedDate = item[bodyCell];
 										return (
 											<TableCell align='center' key={bodyCell}>
-												{joinedDate.toString()}
+												{moment(joinedDate).format('LLLL')}
 											</TableCell>
 										);
 									}

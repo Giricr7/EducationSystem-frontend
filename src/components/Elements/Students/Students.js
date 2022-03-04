@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import Loader from '../../UI/Loader/Loader';
 import Intro from '../../Intro/Intro';
 import ControlsBar from '../../ControlsBar/ControlsBar';
@@ -21,8 +22,7 @@ class Students extends Component {
 		} catch (error) {
 			console.log(error);
 			this.setState({ loading: false });
-
-			alert('error');
+			alert('Error 500, Something Went Wrong, please try again later');
 		}
 	};
 
@@ -38,14 +38,34 @@ class Students extends Component {
 		this.props.history.push(`/Students/Details/${studentId}`);
 	};
 	delete = async (studentId, studentName) => {
-		if (window.confirm(`Are you sure you want to delete a teacher with name ${studentName} ?`)) {
-			try {
-				await axios.delete(`settings/student/delete/${studentId}`);
-				this.getStudents();
+		
+		try {
+				
+			Swal.fire({
+				title: `Do you want to delete a student with name ${studentName}`,
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				cancelButtonColor: '#d33',
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: 'Yes, delete it!'
+			}).then(async(result) => {
+				
+				if (result.isConfirmed) {
+					await axios.delete(`settings/student/delete/${studentId}`);
+					this.getStudents();
+				  Swal.fire(
+					'Deleted!',
+					`${studentName} is deleted`,
+					'success'
+				  )
+				}
+			  })
+
 			} catch (error) {
 				console.log(error);
 			}
-		}
+		
 	};
 
 	classChangeHandler = e => {
@@ -80,7 +100,11 @@ class Students extends Component {
 	};
 
 	search = async () => {
-		if (this.state.searchText === '') return alert('Please insert something');
+		if (this.state.searchText === '')
+		{ return Swal.fire({
+			title:'Please insert something',
+			icon:'question'
+		}) };
 		this.setState({ loading: true });
 		try {
 			const response = await axios.get(`settings/students/search/${this.state.searchText}`);
@@ -89,7 +113,10 @@ class Students extends Component {
 			console.log(response.data.students);
 
 			if (response.data.students.length < 1) {
-				return alert('Students Not Found!');
+				return Swal.fire({
+					title:'Students Not Found!',
+					icon:'info'
+			});
 			}
 			this.setState({ students: response.data.students });
 		} catch (error) {

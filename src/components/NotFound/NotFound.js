@@ -7,7 +7,7 @@ function NotFound() {
 				404, Page Not Found, this url is not a part of our app.
 			</h1>
 			<div style={{ textAlign: 'center' }}>
-				<Link>Back To Subjects</Link>
+				<Link to={{pathname:'/Subjects'}}>Back To Subjects</Link>
 			</div>
 		</Fragment>
 	);

@@ -121,7 +121,7 @@ function ResponsiveDrawer(props) {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant='h5' noWrap>
-						<span className='specialColor'>S</span>chool <span className='specialColor'>M</span>anagement {' '}
+						<span className='specialColor'>E</span>ducation {' '}
 						<span className='specialColor'>S</span>ystem
 					</Typography>
 				</Toolbar>
